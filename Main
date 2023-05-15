@@ -1,0 +1,77 @@
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.FileWriter;
+
+public class project2 implements Runnable{
+
+    static int num1;
+    static int num2;
+    static String filename;
+    public static void main(String[] args){
+        project2 thread = new project2();
+        Thread threadObj = new Thread(thread);
+        Scanner reader = new Scanner(System.in);
+        /*int counter = 0;
+        System.out.print("Enter both numbers separated by a space: ");
+        num1 = reader.nextInt();
+        num2 = reader.nextInt();
+        threadObj.start();
+        while(threadObj.isAlive()){
+            System.out.println("calculation pending, " + counter);
+            counter++;
+        }*/
+
+        System.out.print("Enter file name: ");
+        filename = reader.nextLine();
+        File fileObj = new File(filename);
+        try{
+            //creating file
+            if(fileObj.createNewFile()){
+                System.out.println("File created");
+            }
+
+            //writing
+            FileWriter writer = new FileWriter(fileObj);
+            String sentence = "";
+            while(!sentence.equalsIgnoreCase("exit")){
+                System.out.print("Enter what to say in file: ");
+                sentence = reader.nextLine();
+                if(!sentence.equalsIgnoreCase("exit")){
+                    writer.write(sentence + "\n");
+                }
+            }
+            writer.close();
+
+            //reading
+            Scanner filereader = new Scanner(fileObj);
+            int countLine=0;
+            int countWord=0;
+            while(filereader.hasNextLine()){
+                countLine++;
+                String line = filereader.nextLine();
+                System.out.println(line);
+                int words = line.split(" ").length;
+                countWord+=words;
+            }
+            System.out.println("Number of lines: " + countLine);
+            System.out.println("Number of words: " + countWord);
+            filereader.close();
+        }
+        catch(FileNotFoundException e){
+            System.out.println("File was not found");
+            e.printStackTrace();
+        }
+        catch(IOException e){
+            System.out.println("Error occured");
+            e.printStackTrace();
+        }
+    }
+
+    public void run(){
+        double ans = Math.pow(num1, num2);
+        System.out.println(num1 + " ^ " + num2 + " = " + ans);
+        
+    }   
+}
